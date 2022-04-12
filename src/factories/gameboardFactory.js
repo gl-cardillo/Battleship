@@ -41,10 +41,12 @@ class Gameboard {
   }
 
   placeShipVertically(ships, initialRow, initialColumn) {
-    let shipLength = ships[0].length;
-    if (initialRow + shipLength > 9) return;
+
+    let shipLength = ships[0].length;  
+    if (initialRow + shipLength > 9) return;   
     if (this.checkPositionIsFree(shipLength, initialRow, initialColumn, true))
       return;
+
     for (let i = 0; i < shipLength; i++) {
       document
         .querySelector(
@@ -54,6 +56,7 @@ class Gameboard {
       this.board[initialRow + i][initialColumn].ship = true;
     }
     ships.shift();
+
   }
 
   placeShipHorizontally(ships, initialRow, initialColumn) {
