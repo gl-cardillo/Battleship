@@ -85,17 +85,17 @@ body {
 }
 
 button {
-  margin: 10px 3px;
-  align-items: center;
+  margin: 10px 3px;  
+  display: flex;
+  align-items: center;  
+  justify-content: center;  
+  color: #FFFFFF;
   background-image: linear-gradient(144deg,#1f3dc5, #114c99 50%,#548cf3);
   border: 0;
   border-radius: 8px;
-  color: #FFFFFF;
-  display: flex;
   font-size: 24px;
-  justify-content: center;
-  min-height: 50px;
-  min-width: 130px;
+  height: 50px;
+  width: 130px;
   padding: 5px 15px;
   cursor: pointer;
   font-weight: 600;
@@ -131,14 +131,14 @@ button:hover {
 }
 
 .square:hover {
-  background-color: rgb(156, 155, 155);
+  background-color: rgba(156, 155, 155, 0.493);
 }
 
-.hit-water {
+.hit-water , .hit-water:hover{
   background-color: green;
 }
 
-.hit-ship {
+.hit-ship, .hit-ship:hover {
   background-color: red;
 }
 

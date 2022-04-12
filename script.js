@@ -10,6 +10,7 @@ let submarine = new Ship(3);
 let patrolboat = new Ship(2);
 
 const start = document.querySelector(".start");
+const rotate = document.querySelector(".rotate");
 const buttonContainer = document.querySelector(".buttons");
 const playerContaier = document.querySelector(".player-container");
 const computerContainer = document.querySelector(".computer-container");
@@ -41,13 +42,29 @@ function game() {
 }
 
 function setGame() {
-//prepare game
+  //prepare game
   const setRandomly = document.querySelector(".random");
   displayBoard(playerContaier);
-// randomly set ship on player board
+  // randomly set ship on player board
+  let rotation = true;
+
+  rotate.addEventListener("click", () => {
+    if (rotation) {
+      rotation = false;
+    } else {
+      rotation = true;
+    }
+  });
+
+  let ships = [carrier, battleship, destoyer, submarine, patrolboat];
+  playerContaier.addEventListener("click", (e) =>
+    placeShipOnBoard(e, rotation, ships)
+  );
+
   setRandomly.addEventListener("click", () => {
     let ships = [carrier, battleship, destoyer, submarine, patrolboat];
     start.style.display = "inline";
+    rotate.style.display = "none";
     displayShipOnBoard(playerBoard, ships);
   });
 }
@@ -65,6 +82,43 @@ function startGame() {
   game();
 }
 
+function endGame(winner) {
+  //create element big as window for make player unable to keep playing
+  const screen = document.createElement("div");
+  const winnerContainer = document.createElement("div");
+  const winnerText = document.createElement("p");
+  const playAgain = document.createElement("button");
+
+  winnerText.classList.add("winner-text");
+  screen.classList.add("back-screen");
+  winnerContainer.classList.add("winner");
+
+  playAgain.textContent = "Play again";
+  winnerText.textContent = `${winner} won the match`;
+  winnerContainer.appendChild(winnerText);
+
+  winnerContainer.appendChild(playAgain);
+  screen.appendChild(winnerContainer);
+  gameContainer.appendChild(screen);
+
+  // if play again, reset board and score, remove computer board, show buttons
+  playAgain.addEventListener("click", () => {
+    gameContainer.removeChild(screen);
+    playerBoard.resetBoard();
+    computerBoard.resetBoard();
+    player.resetScore();
+    computer.resetScore();
+    playerContaier.textContent = "";
+    computerContainer.style.display = "none";
+    removeChild(computerContainer);
+    document.querySelector(".computer").style.display = "none";
+    document.querySelector(".buttons").style.display = "block";
+    start.style.display = "none";
+    start.removeEventListener("click", startGame);
+
+    setGame();
+  });
+}
 function displayBoard(container) {
   const field = document.createElement("div");
   field.classList.add("field");
@@ -101,44 +155,26 @@ function displayShipOnBoard(playerBoard, ships) {
   }
 }
 
-function endGame(winner) {
-  //create element big as window for make player unable to keep playing
+function placeShipOnBoard(e, rotation, ships) {
+  // if called with the last ship show star button
+  if (ships.length === 1) {
+    start.style.display = "inline";
+    rotate.style.display = "none";
+  }
+  if (ships.length === 0) return;
 
-  const screen = document.createElement("div");
-  const winnerContainer = document.createElement("div");
-  const winnerText = document.createElement("p");
-  const playAgain = document.createElement("button");
+  let row = e.target.getAttribute("data-row");
+  let column = e.target.getAttribute("data-column");
+  row = parseInt(row);
+  column = parseInt(column);
 
-  winnerText.classList.add("winner-text");
-  screen.classList.add("back-screen");
-  winnerContainer.classList.add("winner");
-
-  playAgain.textContent = "Play again";
-  winnerText.textContent = `${winner} won the match`;
-  winnerContainer.appendChild(winnerText);
-
-  winnerContainer.appendChild(playAgain);
-  screen.appendChild(winnerContainer);
-  gameContainer.appendChild(screen);
-
-// if play again, reset board and score, remove computer board, show buttons
-  playAgain.addEventListener("click", () => {
-    gameContainer.removeChild(screen);
-    playerBoard.resetBoard();
-    computerBoard.resetBoard();
-    player.resetScore();
-    computer.resetScore();
-    playerContaier.textContent = "";
-    computerContainer.style.display = "none";
-    removeChild(computerContainer);
-    document.querySelector(".computer").style.display = "none";
-    document.querySelector(".buttons").style.display = "block";
-    start.style.display = "none";
-    start.removeEventListener("click", startGame);
-
-    setGame();
-  });
+  if (rotation) {
+    playerBoard.placeShipVertically(ships, row, column);
+  } else {
+    playerBoard.placeShipHorizontally(ships, row, column);
+  }
 }
+
 
 function removeChild(element) {
   while (element.firstChild) {
