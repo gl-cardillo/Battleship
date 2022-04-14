@@ -88,6 +88,7 @@ function endGame(winner) {
   const winnerContainer = document.createElement("div");
   const winnerText = document.createElement("p");
   const playAgain = document.createElement("button");
+  playAgain.classList.add('play-again-button')
 
   winnerText.classList.add("winner-text");
   screen.classList.add("back-screen");

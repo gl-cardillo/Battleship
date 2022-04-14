@@ -101,6 +101,10 @@ button {
   font-weight: 600;
 }
 
+.play-again-button {
+  width: 140px;
+}
+
 button:hover {
   padding: 7px 17px;
   font-size: 26px;
